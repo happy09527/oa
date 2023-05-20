@@ -1,12 +1,16 @@
 package com.example.auth;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.auth.mapper.SysRoleMapper;
 import com.example.model.system.SysRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +40,21 @@ public class TestMapper {
         sysRole.setId(9L);
         sysRole.setRoleName("zx");
         sysRole.setIsDeleted(1);
+        sysRole.setCreateTime(new Date());
         System.out.println(sysRole.getId());
 //        sysRoleMapper.updateById(sysRole);
+        LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRole::getRoleName,"系统管理员");
+        List<SysRole> sysRoles = sysRoleMapper.selectList(wrapper);
+        System.out.println(sysRoles);
+    }
+    @Test
+    public void test4(){
+        SysRole sysRole = new SysRole();
+        sysRole.setRoleName("zzz");
+        sysRole.setCreateTime(new Date());
+        LambdaUpdateWrapper<SysRole> wrapper1 =new LambdaUpdateWrapper<>();
+        wrapper1.eq(SysRole::getRoleName,"zx");
+        sysRoleMapper.update(sysRole,wrapper1);
     }
 }
