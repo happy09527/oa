@@ -6,12 +6,12 @@ import lombok.Getter;
 /**
  * @author: ZhangX
  * @createDate: 2023/5/20
- * @description:
+ * @description: 固定结果
  */
 @Getter
 public enum ResultCodeEnum {
-    SUCCESS(200,"成功"),
-    FAIL(201, "失败"),
+    SUCCESS(200,"操作成功"),
+    FAIL(201, "操作失败"),
     SERVICE_ERROR(202, "服务异常"),
     DATA_ERROR(204, "数据异常"),
     LOGIN_AUTH(208, "未登陆"),

@@ -19,18 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ClassName: knife4j
- * Package: com.example.common.config
- * Description:
- *
- * @Author jerry_jy
- * @Create 2023-03-01 10:53
- * @Version 1.0
- */
-
-/**
- * knife4j配置信息
- */
+ * @author: ZhangX
+ * @date: 2023/5/21 11:45
+ * @description: knife4j 配置信息。
+ * 集成swagger2
+ **/
 @Configuration
 @EnableSwagger2WebMvc
 public class Knife4jConfig {
