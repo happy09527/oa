@@ -36,12 +36,11 @@ public class SysRoleController {
         return Result.ok(sysRoleService.list());
     }
 
-    @ApiOperation("分页查询")
+    @ApiOperation("分页查询角色")
     @GetMapping("/{page}/{limit}")
     public Result pageQuery(@PathVariable("page") Long page,
                             @PathVariable("limit") Long limit,
                             SysRoleQueryVo sysRoleQueryVo) {
-        System.out.println(sysRoleQueryVo.getRoleName());
         Page<SysRole> pageParam = new Page<>(page, limit);
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(!StringUtils.isEmpty(sysRoleQueryVo.getRoleName()), SysRole::getRoleName, sysRoleQueryVo.getRoleName());
@@ -49,7 +48,7 @@ public class SysRoleController {
         return Result.ok(pageParam);
     }
 
-    @ApiOperation(value = "根据id获取")
+    @ApiOperation(value = "根据id获取角色")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
         SysRole role = sysRoleService.getById(id);
@@ -89,7 +88,7 @@ public class SysRoleController {
         }
     }
 
-    @ApiOperation(value = "根据id列表删除")
+    @ApiOperation(value = "根据id列表删除角色")
     @PostMapping("batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {
         boolean result = sysRoleService.removeByIds(idList);

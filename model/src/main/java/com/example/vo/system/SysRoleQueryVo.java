@@ -25,5 +25,12 @@ public class SysRoleQueryVo implements Serializable {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+
+	@Override
+	public String toString() {
+		return "SysRoleQueryVo{" +
+				"roleName='" + roleName + '\'' +
+				'}';
+	}
 }
 
