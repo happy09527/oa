@@ -5,11 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @ApiModel(description = "角色菜单")
 @TableName("sys_role_menu")
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysRoleMenu extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
