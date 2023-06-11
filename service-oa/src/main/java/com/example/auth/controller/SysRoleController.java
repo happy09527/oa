@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.auth.service.SysRoleService;
 import com.example.common.result.Result;
 import com.example.model.system.SysRole;
+import com.example.vo.system.AssignRoleVo;
 import com.example.vo.system.SysRoleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: ZhangX
@@ -98,4 +100,21 @@ public class SysRoleController {
             return Result.fail();
         }
     }
+
+    // 1、查询所有角色 和 当前用户所属角色
+    @ApiOperation("根据用户获取角色数据")
+    @GetMapping("/toAssign/{userId}")
+    public Result toAssign(@PathVariable Long userId) {
+        Map<String, Object> map = sysRoleService.findRoleDataByUserId(userId);
+        return Result.ok(map);
+    }
+
+    // 2、为用户分配角色
+    @ApiOperation("为用户分配角色")
+    @PostMapping("/doAssign")
+    public Result doAssign(@RequestBody AssignRoleVo assignRoleVo) {
+        sysRoleService.doAssign(assignRoleVo);
+        return Result.ok();
+    }
+
 }

@@ -2,6 +2,9 @@ package com.example.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.model.system.SysRole;
+import com.example.vo.system.AssignRoleVo;
+
+import java.util.Map;
 
 /**
  * @author: ZhangX
@@ -10,4 +13,7 @@ import com.example.model.system.SysRole;
  */
 
 public interface SysRoleService extends IService<SysRole> {
+    void doAssign(AssignRoleVo assignRoleVo);
+
+    Map<String, Object> findRoleDataByUserId(Long userId);
 }

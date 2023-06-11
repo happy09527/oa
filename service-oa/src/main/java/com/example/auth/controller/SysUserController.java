@@ -10,6 +10,7 @@ import com.example.model.system.SysUser;
 import com.example.vo.system.SysUserQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +71,12 @@ public class SysUserController {
         sysUserService.removeById(id);
         return Result.ok();
     }
-}
 
+    @ApiOperation(value = "更改用户状态")
+    @GetMapping("updateStatus/{id}/{status}")
+    public Result updateStatus(@PathVariable Long id,
+                               @PathVariable Integer status){
+        sysUserService.updateStatus(id,status);
+        return Result.ok();
+    }
+}
