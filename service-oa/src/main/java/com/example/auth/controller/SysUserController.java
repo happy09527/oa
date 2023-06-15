@@ -3,6 +3,7 @@ package com.example.auth.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.auth.service.SysUserService;
 import com.example.common.result.Result;
@@ -14,6 +15,7 @@ import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.security.provider.MD5;
 
 /**
  * <p>
@@ -54,8 +56,11 @@ public class SysUserController {
     @ApiOperation(value = "保存用户")
     @PostMapping("save")
     public Result save(@RequestBody SysUser user) {
-        sysUserService.save(user);
-        return Result.ok();
+        boolean isSuccess = sysUserService.saveUser(user);
+        if(isSuccess){
+            return Result.ok();
+        }
+        return Result.fail();
     }
 
     @ApiOperation(value = "更新用户")

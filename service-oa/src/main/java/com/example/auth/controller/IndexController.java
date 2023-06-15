@@ -1,13 +1,16 @@
 package com.example.auth.controller;
 
+import com.example.auth.service.SysUserService;
+import com.example.auth.utils.JWTUtil;
 import com.example.common.result.Result;
+import com.example.model.system.SysUser;
+import com.example.vo.system.LoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,21 +24,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/system/index")
 public class IndexController {
+    @Autowired
+    SysUserService sysUserService;
     @ApiOperation("登录")
     @PostMapping("login")
-    public Result login() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("token", "admin");
+    public Result login(@RequestBody LoginVo loginVo) {
+        String token = sysUserService.login(loginVo);
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",token);
         return Result.ok(map);
     }
 
     @ApiOperation("获取用户信息")
     @GetMapping("info")
-    public Result info() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("roles", "[admin]");
-        map.put("name", "admin");
-        map.put("avatar", "https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg");
+    public Result info(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Map<String,Object> map = sysUserService.getInfo(token);
         return Result.ok(map);
     }
 

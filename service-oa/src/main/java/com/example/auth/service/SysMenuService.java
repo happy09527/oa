@@ -3,6 +3,7 @@ package com.example.auth.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.model.system.SysMenu;
 import com.example.vo.system.AssignMenuVo;
+import com.example.vo.system.RouterVo;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +25,8 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenu> findMenuByRoleId(Long roleId);
 
     void doAssign(AssignMenuVo assignMenuVo);
+
+    List<RouterVo> findUserMenuByUserId(Long userId);
+
+    List<String> findUserPermissionsByUserId(Long userId);
 }

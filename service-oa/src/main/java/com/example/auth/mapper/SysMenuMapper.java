@@ -3,6 +3,8 @@ package com.example.auth.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.model.system.SysMenu;
 
+import java.util.List;
+
 /**
  * <p>
  * 菜单表 Mapper 接口
@@ -13,4 +15,5 @@ import com.example.model.system.SysMenu;
  */
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
+    List<SysMenu> findMenuListByUserId(Long userId);
 }
