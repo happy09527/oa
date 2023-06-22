@@ -23,4 +23,6 @@ public interface SysUserService extends IService<SysUser> {
     boolean saveUser(SysUser user);
 
     Map<String, Object> getInfo(String token);
+
+    SysUser getUserByUserName(String username);
 }

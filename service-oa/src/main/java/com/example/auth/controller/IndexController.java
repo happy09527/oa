@@ -1,9 +1,7 @@
 package com.example.auth.controller;
 
 import com.example.auth.service.SysUserService;
-import com.example.auth.utils.JWTUtil;
 import com.example.common.result.Result;
-import com.example.model.system.SysUser;
 import com.example.vo.system.LoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

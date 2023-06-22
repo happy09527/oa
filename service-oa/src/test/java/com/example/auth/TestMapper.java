@@ -25,8 +25,15 @@ public class TestMapper {
     SysRoleMapper sysRoleMapper;
     @Test
     public void test1(){
-        List<SysRole> sysRoles = sysRoleMapper.selectList(null);
-        System.out.println(sysRoles);
+//        List<SysRole> sysRoles = sysRoleMapper.selectList(null);
+//        System.out.println(sysRoles);
+        try{
+            int i = 10/ 0;
+        }catch (Exception e){
+            throw new RuntimeException();
+        }finally {
+            System.out.println("aaa");
+        }
     }
     @Test
     public void test2(){

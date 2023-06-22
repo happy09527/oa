@@ -12,6 +12,7 @@
         <module>model</module>
         <module>commons</module>
         <module>service-oa</module>
+        <module>commons/spring-security</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

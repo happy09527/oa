@@ -12,15 +12,14 @@ import com.example.model.system.SysRoleMenu;
 import com.example.vo.system.AssignMenuVo;
 import com.example.vo.system.MetaVo;
 import com.example.vo.system.RouterVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
  * @since 2023-06-11
  */
 @Service
+@Slf4j
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
@@ -107,6 +107,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             // 1.2、如果不是管理员，根据 userId 查询可以操作菜单列表
             // 多表关联查询:sys_role、sys_role_menu、sys_menu
+            log.info(userId + "aaaaaaaaaaaaaaaa");
             sysMenusList = baseMapper.findMenuListByUserId(userId);
         }
         // 2、把查询出来的数据列表， 构建成框架要求的路由结构

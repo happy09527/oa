@@ -3,11 +3,9 @@ package com.example.auth.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.auth.mapper.SysUserMapper;
 import com.example.auth.service.SysMenuService;
-import com.example.auth.service.SysRoleService;
-import com.example.auth.service.SysUserRoleService;
 import com.example.auth.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.auth.utils.JWTUtil;
+import com.example.common.utils.JWTUtil;
 import com.example.common.config.exception.MyException;
 import com.example.common.utils.MD5Util;
 import com.example.model.system.SysUser;
@@ -80,6 +78,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Map<String, Object> getInfo(String token) {
         Long userId = JWTUtil.getUserId(token);
         SysUser sysUser = baseMapper.selectById(userId);
+        log.info(sysUser.toString());
         Map<String,Object> map = new HashMap<>();
         List<RouterVo> menuList =sysMenuService.findUserMenuByUserId(userId);
         List<String> permissionList = sysMenuService.findUserPermissionsByUserId(userId);
@@ -89,5 +88,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         map.put("routers",menuList);
         map.put("buttons",permissionList);
         return map;
+    }
+
+    // 根据用户名查询
+    @Override
+    public SysUser getUserByUserName(String username) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUsername,username);
+        SysUser sysUser = baseMapper.selectOne(queryWrapper);
+        return sysUser;
     }
 }

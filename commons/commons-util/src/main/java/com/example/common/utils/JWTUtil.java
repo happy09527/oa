@@ -1,4 +1,4 @@
-package com.example.auth.utils;
+package com.example.common.utils;
 
 import io.jsonwebtoken.*;
 import org.springframework.util.StringUtils;
