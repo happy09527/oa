@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sun.security.provider.MD5;
 
@@ -32,6 +33,7 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.list')")
     @ApiOperation("分页查询用户")
     @GetMapping("{page}/{limit}")
     public Result pageQuery(@PathVariable("page") Long page,
@@ -46,6 +48,7 @@ public class SysUserController {
         return Result.ok(iPage);
     }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.list')")
     @ApiOperation(value = "获取用户")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
@@ -53,16 +56,18 @@ public class SysUserController {
         return Result.ok(user);
     }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.add')")
     @ApiOperation(value = "保存用户")
     @PostMapping("save")
     public Result save(@RequestBody SysUser user) {
         boolean isSuccess = sysUserService.saveUser(user);
-        if(isSuccess){
+        if (isSuccess) {
             return Result.ok();
         }
         return Result.fail();
     }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.update')")
     @ApiOperation(value = "更新用户")
     @PostMapping("update")
     public Result updateById(@RequestBody SysUser user) {
@@ -70,6 +75,7 @@ public class SysUserController {
         return Result.ok();
     }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.remove')")
     @ApiOperation(value = "删除用户")
     @PostMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
@@ -77,11 +83,12 @@ public class SysUserController {
         return Result.ok();
     }
 
+    @PreAuthorize("hasAuthority('bnt.sysUser.update')")
     @ApiOperation(value = "更改用户状态")
     @GetMapping("updateStatus/{id}/{status}")
     public Result updateStatus(@PathVariable Long id,
-                               @PathVariable Integer status){
-        sysUserService.updateStatus(id,status);
+                               @PathVariable Integer status) {
+        sysUserService.updateStatus(id, status);
         return Result.ok();
     }
 }

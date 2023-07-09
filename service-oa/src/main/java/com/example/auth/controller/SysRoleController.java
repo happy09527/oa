@@ -41,7 +41,6 @@ public class SysRoleController {
     }
 
     @PreAuthorize("hasAuthority('bnt.sysRole.list')")
-
     @ApiOperation("分页查询角色")
     @GetMapping("/{page}/{limit}")
     public Result pageQuery(@PathVariable("page") Long page,
@@ -55,7 +54,6 @@ public class SysRoleController {
     }
 
     @PreAuthorize("hasAuthority('bnt.sysRole.list')")
-
     @ApiOperation(value = "根据id获取角色")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
@@ -111,6 +109,7 @@ public class SysRoleController {
     }
 
     // 1、查询所有角色 和 当前用户所属角色
+//    @PreAuthorize("hasAuthority('bnt.sysUser.assignRole')")
     @ApiOperation("根据用户获取角色数据")
     @GetMapping("/toAssign/{userId}")
     public Result toAssign(@PathVariable Long userId) {
@@ -119,6 +118,7 @@ public class SysRoleController {
     }
 
     // 2、为用户分配角色
+    @PreAuthorize("hasAuthority('bnt.sysUser.assignRole')")
     @ApiOperation("为用户分配角色")
     @PostMapping("/doAssign")
     public Result doAssign(@RequestBody AssignRoleVo assignRoleVo) {
