@@ -22,9 +22,9 @@ public class CodeGenerate {
         // 2、全局配置
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("E:\\javaPro\\oa\\service-oa"+"/src/main/java");
+        gc.setOutputDir("E:\\javaPro\\oa\\service-oa" + "/src/main/java");
 
-        gc.setServiceName("%sService");	//去掉Service接口的首字母I
+        gc.setServiceName("%sService");    //去掉Service接口的首字母I
         gc.setAuthor("Zhangx");
         gc.setOpen(false);
         mpg.setGlobalConfig(gc);
@@ -41,7 +41,7 @@ public class CodeGenerate {
         // 4、包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.example");
-        pc.setModuleName("auth"); //模块名
+        pc.setModuleName("process"); //模块名
         pc.setController("controller");
         pc.setService("service");
         pc.setMapper("mapper");
@@ -50,7 +50,7 @@ public class CodeGenerate {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("sys_menu","sys_role_menu");
+        strategy.setInclude("oa_process");
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
 
