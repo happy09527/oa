@@ -6,6 +6,7 @@ import com.example.common.result.Result;
 import com.example.common.result.ResultCodeEnum;
 import com.example.common.utils.JWTUtil;
 import com.example.common.utils.ResponseUtil;
+import com.example.security.custom.LoginUserInfoHelper;
 import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -65,8 +66,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         logger.info("token:" + token);
         if (!StringUtils.isEmpty(token)) {
             String username = JWTUtil.getUsername(token);
-            logger.info("useruame:" + username);
+            logger.info("username:" + username);
             if (!StringUtils.isEmpty(username)) {
+                //通过ThreadLocal记录当前登录人信息
+                LoginUserInfoHelper.setUserId(JWTUtil.getUserId(token));
+                LoginUserInfoHelper.setUsername(username);
                 String authoritiesString = (String) redisTemplate.opsForValue().get(username);
                 List<Map> mapList = JSON.parseArray(authoritiesString, Map.class);
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();

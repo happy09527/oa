@@ -9,6 +9,7 @@ import com.example.common.utils.JWTUtil;
 import com.example.common.config.exception.MyException;
 import com.example.common.utils.MD5Util;
 import com.example.model.system.SysUser;
+import com.example.security.custom.LoginUserInfoHelper;
 import com.example.vo.system.LoginVo;
 import com.example.vo.system.RouterVo;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysMenuService sysMenuService;
 
     @Override
+    public Map<String, Object> getCurrentUser() {
+        SysUser sysUser = baseMapper.selectById(LoginUserInfoHelper.getUserId());
+        //SysDept sysDept = sysDeptService.getById(sysUser.getDeptId());
+        //SysPost sysPost = sysPostService.getById(sysUser.getPostId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", sysUser.getName());
+        map.put("phone", sysUser.getPhone());
+        //map.put("deptName", sysDept.getName());
+        //map.put("postName", sysPost.getName());
+        return map;
+    }
+
+    @Override
     public void updateStatus(Long id, Integer status) {
         SysUser sysUser = baseMapper.selectById(id);
         // 设置修改状态
@@ -49,16 +63,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public String login(LoginVo loginVo) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUsername , loginVo.getUsername());
+        queryWrapper.eq(SysUser::getUsername, loginVo.getUsername());
         SysUser sysUser = baseMapper.selectOne(queryWrapper);
-        if(sysUser == null){
-            throw new MyException(202,"用户不存在");
+        if (sysUser == null) {
+            throw new MyException(202, "用户不存在");
         }
-        String password =sysUser.getPassword();
-        if(!password.equals(MD5Util.encrypt(loginVo.getPassword()))){
-            throw new MyException(202,"用户密码错误");
+        String password = sysUser.getPassword();
+        if (!password.equals(MD5Util.encrypt(loginVo.getPassword()))) {
+            throw new MyException(202, "用户密码错误");
         }
-        String token = JWTUtil.createToken(sysUser.getId(),sysUser.getUsername());
+        String token = JWTUtil.createToken(sysUser.getId(), sysUser.getUsername());
         return token;
     }
 
@@ -67,9 +81,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String password = MD5Util.encrypt(user.getPassword());
         user.setPassword(password);
         int isSuccess = baseMapper.insert(user);
-        if(isSuccess == 1){
+        if (isSuccess == 1) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -79,14 +93,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Long userId = JWTUtil.getUserId(token);
         SysUser sysUser = baseMapper.selectById(userId);
         log.info(sysUser.toString());
-        Map<String,Object> map = new HashMap<>();
-        List<RouterVo> menuList =sysMenuService.findUserMenuByUserId(userId);
+        Map<String, Object> map = new HashMap<>();
+        List<RouterVo> menuList = sysMenuService.findUserMenuByUserId(userId);
         List<String> permissionList = sysMenuService.findUserPermissionsByUserId(userId);
         map.put("roles", new HashSet<>());
         map.put("name", sysUser.getName());
         map.put("avatar", sysUser.getHeadUrl());
-        map.put("routers",menuList);
-        map.put("buttons",permissionList);
+        map.put("routers", menuList);
+        map.put("buttons", permissionList);
         return map;
     }
 

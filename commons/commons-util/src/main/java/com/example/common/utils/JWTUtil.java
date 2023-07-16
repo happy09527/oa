@@ -53,4 +53,8 @@ public class JWTUtil {
             return null;
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println(JWTUtil.createToken(5L, "zjl"));
+    }
 }

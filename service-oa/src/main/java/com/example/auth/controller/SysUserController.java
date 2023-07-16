@@ -33,6 +33,12 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
+    @ApiOperation(value = "获取当前用户基本信息")
+    @GetMapping("getCurrentUser")
+    public Result getCurrentUser() {
+        return Result.ok(sysUserService.getCurrentUser());
+    }
+
     @PreAuthorize("hasAuthority('bnt.sysUser.list')")
     @ApiOperation("分页查询用户")
     @GetMapping("{page}/{limit}")

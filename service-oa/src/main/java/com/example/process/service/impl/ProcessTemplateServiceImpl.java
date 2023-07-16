@@ -50,10 +50,19 @@ public class ProcessTemplateServiceImpl extends ServiceImpl<ProcessTemplateMappe
         processTemplateMapper.updateById(processTemplate);
 
         //优先发布在线流程设计
-        if(!StringUtils.isEmpty(processTemplate.getProcessDefinitionPath())) {
+        if (!StringUtils.isEmpty(processTemplate.getProcessDefinitionPath())) {
             processService.deployByZip(processTemplate.getProcessDefinitionPath());
         }
     }
+
+    @Override
+    public List<ProcessTemplate> getProcessTemplateByTypeId(Long typeId) {
+        LambdaQueryWrapper<ProcessTemplate> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProcessTemplate::getProcessTypeId, typeId);
+        List<ProcessTemplate> processTemplates = baseMapper.selectList(queryWrapper);
+        return processTemplates;
+    }
+
     @Override
     public IPage<ProcessTemplate> selectPage(Page<ProcessTemplate> pageParam) {
         LambdaQueryWrapper<ProcessTemplate> queryWrapper = new LambdaQueryWrapper<ProcessTemplate>();

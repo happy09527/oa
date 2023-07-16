@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.model.process.ProcessTemplate;
 
+import java.util.List;
+
 /**
  * <p>
  * 审批模板 服务类
@@ -17,4 +19,6 @@ public interface ProcessTemplateService extends IService<ProcessTemplate> {
     IPage<ProcessTemplate> selectPage(Page<ProcessTemplate> pageParam);
 
     void publish(Long id);
+
+    List<ProcessTemplate> getProcessTemplateByTypeId(Long typeId);
 }
