@@ -29,12 +29,13 @@ import sun.security.provider.MD5;
 @Api(tags = "用户管理")
 @RestController
 @RequestMapping("/admin/system/sysUser")
+@CrossOrigin
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
     @ApiOperation(value = "获取当前用户基本信息")
-    @GetMapping("getCurrentUser")
+    @GetMapping("/getCurrentUser")
     public Result getCurrentUser() {
         return Result.ok(sysUserService.getCurrentUser());
     }

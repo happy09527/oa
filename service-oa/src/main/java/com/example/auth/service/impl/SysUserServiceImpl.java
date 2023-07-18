@@ -15,6 +15,7 @@ import com.example.vo.system.RouterVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,13 +39,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Map<String, Object> getCurrentUser() {
         SysUser sysUser = baseMapper.selectById(LoginUserInfoHelper.getUserId());
-        //SysDept sysDept = sysDeptService.getById(sysUser.getDeptId());
-        //SysPost sysPost = sysPostService.getById(sysUser.getPostId());
         Map<String, Object> map = new HashMap<>();
         map.put("name", sysUser.getName());
         map.put("phone", sysUser.getPhone());
-        //map.put("deptName", sysDept.getName());
-        //map.put("postName", sysPost.getName());
+        System.out.println(map);
         return map;
     }
 
@@ -108,7 +106,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser getUserByUserName(String username) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUsername,username);
+        queryWrapper.eq(SysUser::getUsername, username);
         SysUser sysUser = baseMapper.selectOne(queryWrapper);
         return sysUser;
     }
