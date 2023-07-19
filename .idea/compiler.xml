@@ -22,6 +22,7 @@
       <module name="commons" options="" />
       <module name="commons-util" options="-parameters" />
       <module name="model" options="-parameters" />
+      <module name="oa" options="-parameters" />
       <module name="service-oa" options="-parameters" />
       <module name="service-util" options="-parameters" />
       <module name="spring-security" options="-parameters" />

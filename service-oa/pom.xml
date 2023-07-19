@@ -62,7 +62,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--    微信    -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>4.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -86,7 +91,8 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes> <include>**/*.yml</include>
+                <includes>
+                    <include>**/*.yml</include>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>

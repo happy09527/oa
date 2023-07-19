@@ -9,7 +9,7 @@ import com.example.model.wechat.Menu;
  * </p>
  *
  * @author Zhangx
- * @since 2023-07-18
+ * @since 2023-07-19
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
