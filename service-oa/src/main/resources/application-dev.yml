@@ -46,3 +46,4 @@ spring:
 wechat:
   mpAppId: wx0eac105b3953ba36
   mpAppSecret: 3cc0e6e30c308fdbe15a21856f0773e3
+  userInfoUrl: http://ggkt2.vipgz1.91tunnel.com/admin/wechat/userInfo

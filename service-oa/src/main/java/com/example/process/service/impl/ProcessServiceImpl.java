@@ -21,6 +21,7 @@ import com.example.vo.process.ProcessFormVo;
 import com.example.vo.process.ProcessQueryVo;
 import com.example.vo.process.ProcessVo;
 
+import com.example.wechat.service.MessageService;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.EndEvent;
 import org.activiti.bpmn.model.FlowNode;
@@ -39,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -347,6 +349,10 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
     @Autowired
     private HistoryService historyService;
 
+
+    @Autowired
+    private MessageService messageService;
+
     //审批管理列表
     @Override
     public IPage<ProcessVo> selectPage(Page<ProcessVo> pageInfo, ProcessQueryVo processQueryVo) {
@@ -368,7 +374,8 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
 
     // 启动流程
     @Override
-    public void startUp(ProcessFormVo processFormVo) {
+    @Transactional
+    public Process startUp(ProcessFormVo processFormVo) {
         // 1 根据当前用户id获取用户信息
         SysUser sysUser = sysUserService.getById(LoginUserInfoHelper.getUserId());
 
@@ -411,25 +418,23 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
         // 启动流程实例
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variable);
 
-        // 5 查询下一个审批人
-        // 审批人可能多个
+
+        //计算下一个审批人
         List<Task> taskList = this.getCurrentTaskList(processInstance.getId());
-        List<String> nameList = new ArrayList<>();
-        for (Task task : taskList) {
-            String assigneeName = task.getAssignee();
-            SysUser user = sysUserService.getUserByUserName(assigneeName);
-            String name = user.getName();
-            nameList.add(name);
+        if (!CollectionUtils.isEmpty(taskList)) {
+            List<String> assigneeList = new ArrayList<>();
+            for(Task task : taskList) {
+                SysUser user = sysUserService.getUserByUserName(task.getAssignee());
+                assigneeList.add(user.getName());
 
-            // TODO 6 推送消息
+                //推送消息给下一个审批人
+                messageService.pushPendingMessage(process.getId(), user.getId(), task.getId());
+            }
+            process.setDescription("等待" + StringUtils.join(assigneeList.toArray(), ",") + "审批");
         }
-        process.setProcessInstanceId(processInstance.getId());
-        process.setDescription("等待" + StringUtils.join(nameList.toArray(), ",") + "审批");
-        // 7 业务和流程关联  更新oa_process数据
-        baseMapper.updateById(process);
 
-        // 记录操作审批信息记录
-        processRecordService.record(process.getId(), 1, "发起申请");
+        baseMapper.updateById(process);
+        return process;
     }
 
     // 查询待处理的列表
@@ -548,23 +553,23 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 approvalVo.getStatus(), description);
 
         //4 查询下一个审批人，更新流程表记录 process表记录
-        Process process = baseMapper.selectById(approvalVo.getProcessId());
-        //查询任务
+        //计算下一个审批人
+        Process process = this.getById(approvalVo.getProcessId());
         List<Task> taskList = this.getCurrentTaskList(process.getProcessInstanceId());
         if (!CollectionUtils.isEmpty(taskList)) {
-            List<String> assignList = new ArrayList<>();
-            for (Task task : taskList) {
-                String assignee = task.getAssignee();
-                SysUser sysUser = sysUserService.getUserByUserName(assignee);
-                assignList.add(sysUser.getName());
+            List<String> assigneeList = new ArrayList<>();
+            for(Task task : taskList) {
+                SysUser sysUser = sysUserService.getUserByUserName(task.getAssignee());
+                assigneeList.add(sysUser.getName());
 
-                //TODO 公众号消息推送
+                //推送消息给下一个审批人
+                messageService.pushPendingMessage(process.getId(), sysUser.getId(), task.getId());
             }
-            //更新process流程信息
-            process.setDescription("等待" + StringUtils.join(assignList.toArray(), ",") + "审批");
+
+            process.setDescription("等待" + StringUtils.join(assigneeList.toArray(), ",") + "审批");
             process.setStatus(1);
         } else {
-            if (approvalVo.getStatus().intValue() == 1) {
+            if(approvalVo.getStatus().intValue() == 1) {
                 process.setDescription("审批完成（通过）");
                 process.setStatus(2);
             } else {
@@ -572,7 +577,9 @@ public class ProcessServiceImpl extends ServiceImpl<ProcessMapper, Process> impl
                 process.setStatus(-1);
             }
         }
-        baseMapper.updateById(process);
+        //推送消息给申请人
+        messageService.pushProcessedMessage(process.getId(), process.getUserId(), approvalVo.getStatus());
+        this.updateById(process);
     }
 
     //已处理

@@ -80,8 +80,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param web
      * @throws Exception
      */
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/favicon.ico", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/doc.html");
+//    }
+    /**
+     * 配置哪些请求不拦截
+     * 排除swagger相关请求
+     * @param web
+     * @throws Exception
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favicon.ico", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/doc.html");
+        web.ignoring().antMatchers("/admin/modeler/**","/diagram-viewer/**","/editor-app/**","/*.html",
+                "/admin/processImage/**",
+                "/admin/wechat/authorize","/admin/wechat/userInfo","/admin/wechat/bindPhone",
+                "/favicon.ico","/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/doc.html");
     }
 }
